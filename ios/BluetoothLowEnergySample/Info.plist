@@ -35,8 +35,10 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>We use Bluetooth to connect to the MantisX hardware device.</string>
+  <key>NSBluetoothAlwaysUsageDescription</key>
+  <string>App would like to use your bluetooth for communication purposes</string>
+  <key>NSBluetoothPeripheralUsageDescription</key>
+  <string>App would like to use your bluetooth for communication purposes</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>

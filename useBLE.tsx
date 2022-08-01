@@ -1,6 +1,17 @@
+/* eslint-disable no-bitwise */
 import {useState} from 'react';
 import {PermissionsAndroid, Platform} from 'react-native';
-import {BleManager, Device} from 'react-native-ble-plx';
+import {
+  BleError,
+  BleManager,
+  Characteristic,
+  Device,
+} from 'react-native-ble-plx';
+
+import {atob} from 'react-native-quick-base64';
+
+const HEART_RATE_UUID = '0000180d-0000-1000-8000-00805f9b34fb';
+const HEART_RATE_CHARACTERISTIC = '00002a37-0000-1000-8000-00805f9b34fb';
 
 const bleManager = new BleManager();
 
@@ -9,12 +20,17 @@ type VoidCallback = (result: boolean) => void;
 interface BluetoothLowEnergyApi {
   requestPermissions(cb: VoidCallback): Promise<void>;
   scanForPeripherals(): void;
+  connectToDevice: (deviceId: Device) => Promise<void>;
+  disconnectFromDevice: (deviceId: string) => void;
+  isConnected: boolean;
   allDevices: Device[];
-  connectToDevice: (deviceId: string) => void;
+  heartRate: number;
 }
 
 function useBLE(): BluetoothLowEnergyApi {
   const [allDevices, setAllDevices] = useState<Device[]>([]);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [heartRate, setHeartRate] = useState<number>(0);
 
   const requestPermissions = async (cb: VoidCallback) => {
     if (Platform.OS === 'android') {
@@ -52,14 +68,71 @@ function useBLE(): BluetoothLowEnergyApi {
       }
     });
 
-  const connectToDevice = (deviceId: string) =>
-    bleManager.connectToDevice(deviceId);
+  const connectToDevice = async (device: Device) => {
+    try {
+      const deviceConnection = await bleManager.connectToDevice(device.id);
+      await deviceConnection.discoverAllServicesAndCharacteristics();
+      setIsConnected(true);
+      bleManager.stopDeviceScan();
+      startStreamingData(deviceConnection);
+    } catch (e) {
+      console.log('FAILED TO CONNECT', e);
+    }
+  };
+
+  const disconnectFromDevice = (deviceId: string) => {
+    bleManager.cancelDeviceConnection(deviceId);
+    setIsConnected(false);
+  };
+
+  const onHeartRateUpdate = (
+    error: BleError | null,
+    characteristic: Characteristic | null,
+  ) => {
+    if (error) {
+      console.log(error);
+      return -1;
+    } else if (!characteristic?.value) {
+      console.log('No Data was recieved');
+      return -1;
+    }
+
+    const rawData = atob(characteristic.value);
+    let innerHeartRate: number = -1;
+
+    const firstBitValue: number = Number(rawData) & 0x01;
+
+    if (firstBitValue === 0) {
+      innerHeartRate = rawData[1].charCodeAt(0);
+    } else {
+      innerHeartRate =
+        Number(rawData[1].charCodeAt(0) << 8) +
+        Number(rawData[2].charCodeAt(2));
+    }
+
+    setHeartRate(innerHeartRate);
+  };
+
+  const startStreamingData = async (device: Device) => {
+    if (device) {
+      device.monitorCharacteristicForService(
+        HEART_RATE_UUID,
+        HEART_RATE_CHARACTERISTIC,
+        (error, characteristic) => onHeartRateUpdate(error, characteristic),
+      );
+    } else {
+      console.log('No Device Connected');
+    }
+  };
 
   return {
     scanForPeripherals,
     requestPermissions,
     connectToDevice,
     allDevices,
+    isConnected,
+    disconnectFromDevice,
+    heartRate,
   };
 }
 

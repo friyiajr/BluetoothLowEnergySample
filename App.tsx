@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,10 +6,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import DeviceModal from './DeviceConnectionModal';
+import PulseIndicator from './PulseIndicator';
 import useBLE from './useBLE';
 
 const App = () => {
-  const {requestPermissions, scanForPeripherals, allDevices} = useBLE();
+  const {
+    requestPermissions,
+    scanForPeripherals,
+    allDevices,
+    connectToDevice,
+    isConnected,
+    heartRate,
+  } = useBLE();
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const scanForDevices = () => {
     requestPermissions(isGranted => {
@@ -19,19 +29,39 @@ const App = () => {
     });
   };
 
+  const hideModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const openModal = async () => {
+    scanForDevices();
+    setIsModalVisible(true);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.heartRateTitleWrapper}>
-        <Text style={styles.heartRateTitleText}>
-          Please Connect to a Heart Rate Monitor
-        </Text>
-        {allDevices.map(device => {
-          return <Text>{device.name}</Text>;
-        })}
+        {isConnected ? (
+          <>
+            <PulseIndicator />
+            <Text style={styles.heartRateTitleText}>Your Heart Rate Is:</Text>
+            <Text style={styles.heartRateText}>{heartRate} bpm</Text>
+          </>
+        ) : (
+          <Text style={styles.heartRateTitleText}>
+            Please Connect to a Heart Rate Monitor
+          </Text>
+        )}
       </View>
-      <TouchableOpacity onPress={scanForDevices} style={styles.ctaButton}>
+      <TouchableOpacity onPress={openModal} style={styles.ctaButton}>
         <Text style={styles.ctaButtonText}>Connect</Text>
       </TouchableOpacity>
+      <DeviceModal
+        closeModal={hideModal}
+        visible={isModalVisible}
+        connectToPeripheral={connectToDevice}
+        devices={allDevices}
+      />
     </SafeAreaView>
   );
 };

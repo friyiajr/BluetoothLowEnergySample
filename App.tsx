@@ -16,8 +16,9 @@ const App = () => {
     scanForPeripherals,
     allDevices,
     connectToDevice,
-    isConnected,
+    connectedDevice,
     heartRate,
+    disconnectFromDevice,
   } = useBLE();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
@@ -41,7 +42,7 @@ const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.heartRateTitleWrapper}>
-        {isConnected ? (
+        {connectedDevice ? (
           <>
             <PulseIndicator />
             <Text style={styles.heartRateTitleText}>Your Heart Rate Is:</Text>
@@ -53,8 +54,12 @@ const App = () => {
           </Text>
         )}
       </View>
-      <TouchableOpacity onPress={openModal} style={styles.ctaButton}>
-        <Text style={styles.ctaButtonText}>Connect</Text>
+      <TouchableOpacity
+        onPress={connectedDevice ? disconnectFromDevice : openModal}
+        style={styles.ctaButton}>
+        <Text style={styles.ctaButtonText}>
+          {connectedDevice ? 'Disconnect' : 'Connect'}
+        </Text>
       </TouchableOpacity>
       <DeviceModal
         closeModal={hideModal}

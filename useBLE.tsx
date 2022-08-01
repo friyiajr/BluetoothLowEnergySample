@@ -21,15 +21,15 @@ interface BluetoothLowEnergyApi {
   requestPermissions(cb: VoidCallback): Promise<void>;
   scanForPeripherals(): void;
   connectToDevice: (deviceId: Device) => Promise<void>;
-  disconnectFromDevice: (deviceId: string) => void;
-  isConnected: boolean;
+  disconnectFromDevice: () => void;
+  connectedDevice: Device | null;
   allDevices: Device[];
   heartRate: number;
 }
 
 function useBLE(): BluetoothLowEnergyApi {
   const [allDevices, setAllDevices] = useState<Device[]>([]);
-  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
   const [heartRate, setHeartRate] = useState<number>(0);
 
   const requestPermissions = async (cb: VoidCallback) => {
@@ -71,8 +71,8 @@ function useBLE(): BluetoothLowEnergyApi {
   const connectToDevice = async (device: Device) => {
     try {
       const deviceConnection = await bleManager.connectToDevice(device.id);
+      setConnectedDevice(deviceConnection);
       await deviceConnection.discoverAllServicesAndCharacteristics();
-      setIsConnected(true);
       bleManager.stopDeviceScan();
       startStreamingData(deviceConnection);
     } catch (e) {
@@ -80,9 +80,12 @@ function useBLE(): BluetoothLowEnergyApi {
     }
   };
 
-  const disconnectFromDevice = (deviceId: string) => {
-    bleManager.cancelDeviceConnection(deviceId);
-    setIsConnected(false);
+  const disconnectFromDevice = () => {
+    if (connectedDevice) {
+      bleManager.cancelDeviceConnection(connectedDevice.id);
+      setConnectedDevice(null);
+      setHeartRate(0);
+    }
   };
 
   const onHeartRateUpdate = (
@@ -130,7 +133,7 @@ function useBLE(): BluetoothLowEnergyApi {
     requestPermissions,
     connectToDevice,
     allDevices,
-    isConnected,
+    connectedDevice,
     disconnectFromDevice,
     heartRate,
   };

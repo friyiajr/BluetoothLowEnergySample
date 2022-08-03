@@ -6,66 +6,35 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import DeviceModal from './DeviceConnectionModal';
-import PulseIndicator from './PulseIndicator';
-import useBLE from './useBLE';
 
 const App = () => {
-  const {
-    requestPermissions,
-    scanForPeripherals,
-    allDevices,
-    connectToDevice,
-    connectedDevice,
-    heartRate,
-    disconnectFromDevice,
-  } = useBLE();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-
-  const scanForDevices = () => {
-    requestPermissions(isGranted => {
-      if (isGranted) {
-        scanForPeripherals();
-      }
-    });
-  };
 
   const hideModal = () => {
     setIsModalVisible(false);
   };
 
   const openModal = async () => {
-    scanForDevices();
     setIsModalVisible(true);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.heartRateTitleWrapper}>
-        {connectedDevice ? (
-          <>
-            <PulseIndicator />
-            <Text style={styles.heartRateTitleText}>Your Heart Rate Is:</Text>
-            <Text style={styles.heartRateText}>{heartRate} bpm</Text>
-          </>
-        ) : (
-          <Text style={styles.heartRateTitleText}>
-            Please Connect to a Heart Rate Monitor
-          </Text>
-        )}
-      </View>
-      <TouchableOpacity
-        onPress={connectedDevice ? disconnectFromDevice : openModal}
-        style={styles.ctaButton}>
-        <Text style={styles.ctaButtonText}>
-          {connectedDevice ? 'Disconnect' : 'Connect'}
+        <Text style={styles.heartRateTitleText}>
+          Please Connect to a Heart Rate Monitor
         </Text>
+      </View>
+      <TouchableOpacity onPress={openModal} style={styles.ctaButton}>
+        <Text style={styles.ctaButtonText}>{'Connect'}</Text>
       </TouchableOpacity>
       <DeviceModal
         closeModal={hideModal}
         visible={isModalVisible}
-        connectToPeripheral={connectToDevice}
-        devices={allDevices}
+        connectToPeripheral={hideModal}
+        devices={[]}
       />
     </SafeAreaView>
   );

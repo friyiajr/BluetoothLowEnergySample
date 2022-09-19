@@ -5692,10 +5692,20 @@ react-native-codegen@^0.69.1:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
+react-native-device-info@^10.2.0:
+  version "10.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.2.0.tgz#be17a1b86cabbe53f4adde96b662204784d3cefd"
+  integrity sha512-7VycjFGaLKIZLDwCxSK5cWZdDOGqz3QxdGF57B/a4bW3gkrUFa5Gf0v7fUR9YL/VBJM0UwDiDH7pR9hkMQt+vw==
+
 react-native-gradle-plugin@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.7.tgz#96602f909745239deab7b589443f14fce5da2056"
   integrity sha512-+4JpbIx42zGTONhBTIXSyfyHICHC29VTvhkkoUOJAh/XHPEixpuBduYgf6Y4y9wsN1ARlQhBBoptTvXvAFQf5g==
+
+react-native-permissions@^3.6.1:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.6.1.tgz#73adcc1cef8cd57a9ef167b4507405f4ff5749c4"
+  integrity sha512-fzPpPQXeD34inUccqtoResSwYubfrwUguP4qrVUUv8+KSMjYSaHGoS5HaIJLZHlN9gO+TvLJZ2L5ZljTsb6qnQ==
 
 react-native-quick-base64@^2.0.5:
   version "2.0.5"

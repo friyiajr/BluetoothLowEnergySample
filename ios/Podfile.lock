@@ -76,6 +76,8 @@ PODS:
   - libevent (2.1.12)
   - MultiplatformBleAdapter (0.1.9)
   - OpenSSL-Universal (1.1.1100)
+  - Permission-BluetoothPeripheral (3.6.1):
+    - RNPermissions
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -385,6 +387,10 @@ PODS:
     - React-jsi (= 0.69.3)
     - React-logger (= 0.69.3)
     - React-perflogger (= 0.69.3)
+  - RNDeviceInfo (10.2.0):
+    - React-Core
+  - RNPermissions (3.6.1):
+    - React-Core
   - SocketRocket (0.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -418,6 +424,7 @@ DEPENDENCIES:
   - FlipperKit/SKIOSNetworkPlugin (= 0.125.0)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - OpenSSL-Universal (= 1.1.1100)
+  - Permission-BluetoothPeripheral (from `../node_modules/react-native-permissions/ios/BluetoothPeripheral`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -449,6 +456,8 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -481,6 +490,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/FBReactNativeSpec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  Permission-BluetoothPeripheral:
+    :path: "../node_modules/react-native-permissions/ios/BluetoothPeripheral"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -539,6 +550,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -562,6 +577,7 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
+  Permission-BluetoothPeripheral: 67708853584bb9208c76d36d0e0ea4eafb97ea5b
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: 66822c147facf02f7774af99825e0a31e39df42e
   RCTTypeSafety: 309306c4e711b14a83c55c2816a6cc490ec19827
@@ -591,10 +607,12 @@ SPEC CHECKSUMS:
   React-RCTVibration: dd8099eb46e9cee4692934bc8cbe5e9a4f5e8d31
   React-runtimeexecutor: 607eb048e22a16388c908ee1f6644200e8d1e19b
   ReactCommon: af7636436b382db7cde4583bbd642f0978e6e3ed
+  RNDeviceInfo: 8b83e99e290deaf1bab71673cc636776ef647b6f
+  RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 44c64131616253fa83366295acdbce3d14926041
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 7f5dc43e737608967aed11c503cea7562922b6c3
+PODFILE CHECKSUM: c08d37e28007ee1b03be0d38b261d7ede67787cc
 
 COCOAPODS: 1.11.3

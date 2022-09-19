@@ -14,6 +14,8 @@
     "react": "18.0.0",
     "react-native": "0.69.3",
     "react-native-ble-plx": "^2.0.3",
+    "react-native-device-info": "^10.2.0",
+    "react-native-permissions": "^3.6.1",
     "react-native-quick-base64": "^2.0.5"
   },
   "devDependencies": {
